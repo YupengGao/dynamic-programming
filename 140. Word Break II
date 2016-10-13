@@ -44,3 +44,42 @@ public class Solution {
         }
     }
 }
+
+
+method 2:
+dfs + memorization
+public class Solution {
+    public List<String> wordBreak(String s, Set<String> wordDict) {
+        HashMap<String, List<String>> map = new HashMap<String, List<String>>();
+        return helper(s, wordDict, map);
+    }
+    
+    public List<String> helper(String s, Set<String> wordDict, HashMap<String, List<String>> map){
+        if(map.containsKey(s)){
+            return map.get(s);
+        }
+        List<String> result = new ArrayList<String>();
+        int n = s.length();
+        if(n <= 0){
+            return result;
+        }
+        for(int i = 1 ; i <= n; i++){
+            String st = s.substring(0, i);
+            if(wordDict.contains(st)){
+                if(i == n){
+                    result.add(st);
+                }else{
+                    String prefix = s.substring(i);
+                    List<String> temp = helper(prefix, wordDict, map);
+                    for(String t : temp){
+                        t = st + " " + t;
+                        result.add(t);
+                    }
+                }
+            }
+        }
+        map.put(s, result);
+        return result;
+       
+    }
+}
