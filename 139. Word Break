@@ -1,0 +1,49 @@
+public class Solution {
+    public boolean wordBreak(String s, Set<String> wordDict) {
+        if(wordDict.size() == 0){
+            return false;
+        }
+        HashSet<Integer> set = new HashSet<Integer>();
+        return helper(s, wordDict, 0, set);
+    }
+    
+    public boolean helper(String s, Set<String> wordDict, int pos, HashSet<Integer> set){
+
+        if(set.contains(pos)){
+            return false;
+        }
+        if(pos == s.length()){
+            return true;
+        }
+        for(int i = pos + 1; i <= s.length(); i++){
+            String temp = s.substring(pos, i);
+            if(wordDict.contains(temp)){
+                if(helper(s, wordDict, i, set)){
+                     return true;
+                }
+                set.add(pos);
+            }
+        }
+        return false;
+    }
+}
+
+
+public class Solution {
+    public boolean wordBreak(String s, Set<String> wordDict) {
+        if(wordDict.size() == 0){
+            return false;
+        }
+        boolean arr[] = new boolean[s.length() + 1];
+        arr[0] = true;
+        for(int i = 1; i <= s.length() ; i++){
+            for(int j = i ; j >= 1; j--){
+                if(arr[j - 1] && wordDict.contains(s.substring(j - 1, i))){
+                    arr[i] = true;
+                    break;
+                }
+            }
+        }
+        return arr[s.length()];
+    }
+}
