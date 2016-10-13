@@ -1,0 +1,31 @@
+        //for the substring from index j to index i
+        // if j != 0, cut[i] = min(cut[i], cut[j] + 1)
+        // if j == 0, cut[i] = 0
+        // the condition that the substring is a palindrom
+        // s.charAt(i) == s.charAt(j) && (i - j <= 2 || dp[j + 1][i - 1] == true)
+public class Solution {
+    public int minCut(String s) {
+        if(s.length() == 0){
+            return 0;
+        }
+        int n = s.length();
+        boolean dp[][] = new boolean[n][n];
+        int cut[] = new int[n];
+        for(int i = 0 ; i < n; i++){
+            cut[i] = Integer.MAX_VALUE;
+            for(int j = 0 ; j <= i; j++){
+                if(s.charAt(i) == s.charAt(j)){
+                    if((i - j <= 2) || dp[j + 1][i - 1]){
+                        dp[j][i] = true;
+                        if(j == 0){
+                            cut[i] = 0;
+                        }else{
+                            cut[i] = Math.min(cut[i], cut[j - 1] + 1);
+                        }
+                    }
+                }
+            }
+        }
+        return cut[n - 1];
+    }
+}
