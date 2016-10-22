@@ -1,0 +1,64 @@
+class longestCommmonSubsequence{
+	public static void main(String args[]){
+		String st1 = "gatcgg";
+		String st2 = "caatgtg";
+		int len = LCS(st1, st2);
+		System.out.println(len);
+	}
+
+	public static int LCS(String st1, String st2){
+		int n = st1.length();
+		int m = st2.length();
+		int dp[][] = new int[n + 1][m + 1];
+		String solution[][] = new String[n + 1][m + 1];
+		for(int i = 0 ; i <= n; i++){
+			dp[i][0] = 0;
+		}
+		for(int j = 0 ; j <= m; j++){
+			dp[0][j] = 0;
+		}
+		for(int i = 1; i <= n; i++){
+			for(int j = 1; j <= m; j++){
+				if(st1.charAt(i - 1) == st2.charAt(j - 1)){
+					dp[i][j] = dp[i - 1][j - 1] + 1;
+					solution[i][j] = "dia";
+				}
+				else{
+					// dp[i][j] = Math.max(dp[i][j], Math.max(dp[i - 1][j], dp[i][j - 1]));
+					if(dp[i - 1][j] >= dp[i][j - 1]){
+						dp[i][j] = dp[i - 1][j];
+						solution[i][j] = "up";
+					}
+					else{
+						dp[i][j] = dp[i][j - 1];
+						solution[i][j] = "left";
+					}
+				}
+			}
+		}
+		for(int i = 0; i <= n; i++){
+			for(int j = 0; j <= m; j++){
+				System.out.print(solution[i][j] + " ");
+			}
+			System.out.println();
+		}
+		int i = n, j = m;
+		StringBuilder sb = new StringBuilder();
+		while(i >= 0 && j >= 0 && solution[i][j] != null){
+			// System.out.println(i + " " + j);
+			if(solution[i][j].equals("dia")){
+				sb.insert(0,st1.charAt(i - 1));
+				i--;
+				j--;
+			}
+			else if(solution[i][j].equals("up")){
+				i--;
+			}
+			else if(solution[i][j].equals("left")){
+				j--;
+			}
+		}
+		System.out.println(sb.toString());
+		return dp[n][m];
+	}
+}
