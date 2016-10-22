@@ -1,3 +1,7 @@
+//function asp(i) = 0 if i == 0
+//         asp(i) = max(asp(i - 1), //not select i
+//                      pi + asp(j))  // select i
+
 import java.util.*;
 class activitySelectProblem{
 	public static void main(String args[]){
@@ -14,9 +18,7 @@ class activitySelectProblem{
 			{2,13,11},
 			{12,14,2}
 		};
-		//function asp(i) = 0 if i == 0
-		//         asp(i) = max(asp(i - 1), //not select i
-		//                        pi + asp(j))  // select i
+		
 		int max1 = weightedActivitySelection1(activity);
 		//you can use binary search when search the compatible interval
 		//running time will be O(nlogn)
