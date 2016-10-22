@@ -1,7 +1,11 @@
+//sort activities by finish time 
+//define asp(i) as the max total revenue of a mutually compatible subset of a1....ai,
 //function asp(i) = 0 if i == 0
 //         asp(i) = max(asp(i - 1), //not select i
 //                      pi + asp(j))  // select i
-
+//there are two method to search the compatible interval
+//one is use the linear scan, the time complexity will be O(n^2)
+//another one use the binary search, the time complexity will be O(nlogn)
 import java.util.*;
 class activitySelectProblem{
 	public static void main(String args[]){
