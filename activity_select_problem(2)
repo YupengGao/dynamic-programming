@@ -1,0 +1,103 @@
+/*sort by start time 
+introduce dummy activity A0 and An+1
+choose s0 = f0 = 0 <= s1, p0 = 0
+       sn+1 = fn+1 = max(fi) 1 <= i <= n
+
+the substructure fundtion will be 
+dp[i][j] = 0 if(j - i <= 1)
+dp[i][j] = Max(weight(k) + dp[i][k] + dp[k][j])  k -> (i, j)
+we have two way to implement this algorithm
+one is use for loop, the running time will be O(n^3)
+another one is use recursion with memorization, the running time will be O(n^2)
+*/ 
+import java.util.*;
+class activitySelectProblem2{
+	public static void main(String args[]){
+		int activity[][] = new int[][]{
+			{-1,-1,1},//dummy activity A0
+			{1,4,3},
+			{3,5,2},
+			{0,6,6},
+			{5,7,2},
+			{3,8,5},
+			{5,9,4},
+			{6,10,4},
+			{8,11,3},
+			{8,12,4},
+			{2,13,11},
+			{12,14,2},
+			{15, 16, 2}//dummy activity An+1
+		};
+		int max1 = weightedActivitySelection1(activity);
+		int max2 = weightedActivitySelection2(activity);
+		System.out.println(max1);
+		System.out.println(max2);
+	}
+
+	public static int weightedActivitySelection1(int act[][]){
+		if(act.length == 0){
+			return 0;
+		}
+		//sort by start time
+		Arrays.sort(act, new Comparator<int[]>(){
+			public int compare(int a[], int b[]){
+				return a[0] - b[0];
+			}
+		});
+		int n = act.length;
+		int dp[][] = new int[n][n];
+		for(int i = 0 ; i < n; i++){
+			for(int j = 0 ; j < n; j++){
+				dp[i][j] = -1;
+			}
+		}
+		int num = helper(dp, 0, n - 1, act);
+		return num;
+	}
+
+	public static int helper(int [][]dp, int i, int j, int [][]act){
+		if(dp[i][j] != -1){
+			return dp[i][j];
+		}
+		if(j - i <= 1){
+			return 0;
+		}
+		int max = 0;
+		for(int d = i + 1; d < j; d++){
+			// int endTime = j == act.length + 1 ? act[act.length - 1][1] : act[j - 1][0];
+			if(act[d][0] < act[i][1] || act[d][1] > act[j][0]) continue;
+			max = Math.max(max, helper(dp, i, d, act) + helper(dp, d, j, act) + act[d][2]);
+		}
+		dp[i][j] = max;
+		return max;
+	}
+
+	public static int weightedActivitySelection2(int [][]act){
+		if(act.length == 0){
+			return 0;
+		}
+		//sort by start time
+		Arrays.sort(act, new Comparator<int[]>(){
+			public int compare(int a[], int b[]){
+				return a[0] - b[0];
+			}
+		});
+		int n = act.length;
+		int dp[][] = new int[n][n];
+
+		for(int l = 2; l < n; l++){
+			for(int i = 0; i < n - l; i++){
+				int j = i + l ;
+				dp[i][j] = 0;
+				for(int k = i + 1; k < j; k++){
+					if(act[k][0] >= act[i][1] && act[k][1] <= act[j][0]){
+						dp[i][j] = Math.max(dp[i][j], act[k][2] + dp[i][k] + dp[k][j]);
+					}
+				}
+			}
+		}
+
+		return dp[0][n - 1];
+	}
+	
+}
